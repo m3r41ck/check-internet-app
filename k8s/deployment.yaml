@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-kube-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hello-kube-app
+  template:
+    metadata:
+      labels:
+        app: hello-kube-app
+    spec:
+      containers:
+      - name: hello-kube-app
+        image: m3r41ck/hello-kube-app:latest
+        ports:
+          - containerPort: 5000
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "250m"
+            memory: "256Mi"
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 5000
+          initalDelaySeconds: 5
+          periodSeconds: 10
